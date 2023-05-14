@@ -12,7 +12,6 @@ READ_API_KEY = '42FNHOI2AE2H4VTG'
 CHANNEL_ID = '2076223'
 NUMBER_OF_SENSORS = 4
 is_header = 0
-
 # ----------------------------------------------------------
 
 
