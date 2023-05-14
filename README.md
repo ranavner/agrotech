@@ -1,9 +1,9 @@
 # Agrotech Final Project
 
 <!-- Took part in this project: -->
-Ran Avner
-Omer Eyal
-Zohar Batito
+[^1]: Ran Avner
+[^2]: Omer Eyal
+[^3]: Zohar Batito
 
 ## Project Description:
 
