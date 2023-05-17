@@ -1,26 +1,26 @@
 import tkinter as tk
 
-# info = input('enter data: ')
-#
-# window = tkinter.Tk()
-# greeting = tkinter.Label(text="Hello, Ran")
-# data = tkinter.Label(text=info, foreground='Blue', background='yellow')
-# data.pack()
-# greeting.pack()
-# exit = tkinter.Button(text='close window')
-# exit.pack()
-# window.mainloop()
+def process_data():
+    data = []
+    for entry in entry_list:
+        value = entry.get()
+        data.append(value)
+    print("Input data:", data)
 
-window = tk.Tk()
-for i in range(3):
-    for j in range(3):
-        frame = tk.Frame(
-            master=window,
-            relief=tk.RAISED,
-            borderwidth=2
-        )
-        frame.grid(row=i, column=j)
-        label = tk.Label(master=frame, text=f"Row {i}\nColumn {j}")
-        label.pack()
+root = tk.Tk()
+root.title("Input Data GUI")
 
-window.mainloop()
+# Create a list to store the Entry widgets
+entry_list = []
+
+# Create and pack 8 Entry widgets
+for i in range(8):
+    entry = tk.Entry(root)
+    entry.pack()
+    entry_list.append(entry)
+
+# Create and pack the submit button
+submit_button = tk.Button(root, text="Submit", command=process_data)
+submit_button.pack()
+
+root.mainloop()

@@ -33,7 +33,7 @@ def create_csv_header():
 def get_data_from_thingspeak():
     time_start = time.perf_counter()
     # executing get command from thingspeak every half a second
-    while time.perf_counter() - time_start <= 5:   # while loop runs for 5 seconds
+    while time.perf_counter() - time_start <= 30:   # while loop runs for 5 seconds
         ts = urlopen("http://api.thingspeak.com/channels/%s/feeds/last.json?api_key=%s"
                      % (CHANNEL_ID, READ_API_KEY))
 
