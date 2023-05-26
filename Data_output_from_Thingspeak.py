@@ -65,13 +65,13 @@ def print_data():
     print(db)
     return 
 
-
+# crearting the csv with the header
 def get_data():
     create_csv_header()
-    get_data_from_thingspeak()      # creating a csv data for 5 seconds
+    get_data_from_thingspeak()
     # need to get data from image
 
-
+# activating GUI_test.py streamlit script
 def send_to_streamlit():
     df = pd.read_csv('fixed.csv')
     st.write("This is the data from Thingspeak: ")

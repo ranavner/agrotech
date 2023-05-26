@@ -8,42 +8,49 @@ st.set_page_config(
     layout="wide",
 )
 
-@st.cache_data
-def get_data() -> pd.DataFrame:
-    return pd.read_csv('fixed.csv')
+st.title("Agrotech Project Dashboard")
 
-df = get_data()
+Sensor1, Sensor2, Sensor3, Sensor4, Sensor5, Sensor6 = st.columns(6)
+df = pd.read_csv(('fixed2.csv'))
+Sensor1.metric(
+    
+    label="Sensor 1 RH",
+    value=df['sensor1'].iloc[-1]
+)
+Sensor2.metric(
+    
+    label="Sensor 2 RH",
+    value=df['sensor2'].iloc[-1]
+)
+Sensor3.metric(
+    
+    label="Sensor 3 RH",
+    value=df['sensor3'].iloc[-1]
+)
+Sensor4.metric(
+    
+    label="Sensor 4 RH",
+    value=df['sensor4'].iloc[-1]
+)
+Sensor5.metric(
+    
+    label="Sensor 5 RH",
+    value=df['sensor5'].iloc[-1]
+)
+Sensor6.metric(
+    
+    label="Sensor 6 RH",
+    value=df['sensor6'].iloc[-1]
+)
 
-placeholder = st.empty()
+col1, col2 = st.columns(2)
+df = pd.read_csv('fixed2.csv')
 
-with placeholder.container():
+with col1:
+    label='graph'
+    value=st.line_chart(df)
+with col2:
+    label='table'
+    value=st.write(df)
 
-    st.title("Agrotech Project Dashboard")
-
-    Sensor1, Sensor2, Sensor3, Sensor4 = st.columns(4)
-
-    Sensor1.metric(
-        
-        label="Sensor 1 RH",
-        value=5
-    )
-    Sensor2.metric(
-        
-        label="Sensor 2 RH",
-        value=45
-    )
-    Sensor3.metric(
-        
-        label="Sensor 3 RH",
-        value=66
-    )
-    Sensor4.metric(
-        
-        label="Sensor 4 RH",
-        value=234
-    )
-
-Sensor2.line_chart(df)
-df = pd.read_csv('fixed.csv')
-st.write(df)
 time.sleep(1)
