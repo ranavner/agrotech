@@ -1,26 +1,49 @@
-import tkinter as tk
+import streamlit as st
+import pandas as pd
+import time
 
-def process_data():
-    data = []
-    for entry in entry_list:
-        value = entry.get()
-        data.append(value)
-    print("Input data:", data)
+st.set_page_config(
+    page_title="Real-Time Data Science Dashboard",
+    page_icon="✅",
+    layout="wide",
+)
 
-root = tk.Tk()
-root.title("Input Data GUI")
+@st.cache_data
+def get_data() -> pd.DataFrame:
+    return pd.read_csv('fixed.csv')
 
-# Create a list to store the Entry widgets
-entry_list = []
+df = get_data()
 
-# Create and pack 8 Entry widgets
-for i in range(8):
-    entry = tk.Entry(root)
-    entry.pack()
-    entry_list.append(entry)
+placeholder = st.empty()
 
-# Create and pack the submit button
-submit_button = tk.Button(root, text="Submit", command=process_data)
-submit_button.pack()
+with placeholder.container():
 
-root.mainloop()
+    st.title("Agrotech Project Dashboard")
+
+    Sensor1, Sensor2, Sensor3, Sensor4 = st.columns(4)
+
+    Sensor1.metric(
+        
+        label="Sensor 1 RH",
+        value=5
+    )
+    Sensor2.metric(
+        
+        label="Sensor 2 RH",
+        value=45
+    )
+    Sensor3.metric(
+        
+        label="Sensor 3 RH",
+        value=66
+    )
+    Sensor4.metric(
+        
+        label="Sensor 4 RH",
+        value=234
+    )
+
+Sensor2.line_chart(df)
+df = pd.read_csv('fixed.csv')
+st.write(df)
+time.sleep(1)

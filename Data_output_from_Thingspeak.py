@@ -3,7 +3,10 @@ from urllib.request import urlopen
 import json
 import time
 import pandas as pd
-
+from tkinter import *
+import streamlit as st
+from streamlit.web import cli as stcli
+import sys
 
 
 # ----------------------------------------------------------
@@ -33,7 +36,7 @@ def create_csv_header():
 def get_data_from_thingspeak():
     time_start = time.perf_counter()
     # executing get command from thingspeak every half a second
-    while time.perf_counter() - time_start <= 30:   # while loop runs for 5 seconds
+    while time.perf_counter() - time_start <= 5:   # while loop runs for 5 seconds
         ts = urlopen("http://api.thingspeak.com/channels/%s/feeds/last.json?api_key=%s"
                      % (CHANNEL_ID, READ_API_KEY))
 
@@ -57,14 +60,29 @@ def get_data_from_thingspeak():
         ts.close()
 
 
-def analyse_data():
+def print_data():
     db = pd.read_csv('fixed.csv')
     print(db)
+    return 
 
+
+def get_data():
+    create_csv_header()
+    get_data_from_thingspeak()      # creating a csv data for 5 seconds
+    # need to get data from image
+
+
+def send_to_streamlit():
+    df = pd.read_csv('fixed.csv')
+    st.write("This is the data from Thingspeak: ")
+    st.write(df)
+    sys.argv = ["streamlit", "run", "GUI_test.py"]
+    sys.exit(stcli.main())
 
 if __name__ == "__main__":
     create_csv_header()
     get_data_from_thingspeak()      # creating a csv data for 5 seconds
     # need to get data from image
-    analyse_data()
+    print_data()
+    send_to_streamlit()
 
