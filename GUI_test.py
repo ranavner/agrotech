@@ -79,7 +79,7 @@ st.download_button(
     mime='text/csv',
 )
 
-if st.button(label='HighTech Computing Integration Module Unit'):
+if st.button(label='HighTech Computing Integration Module'):
     st.snow()
 
 col1, col2, col3 = st.columns(3)
