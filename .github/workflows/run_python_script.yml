@@ -27,5 +27,5 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a python script
-        run: python .github/workflows/GUI_test.py
+        run: python GUI_test.py
 
