@@ -3,23 +3,27 @@ import pandas as pd
 import time
 import plotly.express as px
 
+sensors_csv = 'sensors_csv.csv'
+motion_csv = 'motion_csv.csv'
+
 # creating individual plots for each sensor
-def plotly(df, sensor_number):
+def plotly(sensors_df, sensor_number):
     y = sensor_number
-    df1 = df.tail(30)
-    plot = px.line(df1, x='TIMESTAMP', y=y)
+    sensors_df1 = sensors_df.tail(30)
+    plot = px.line(sensors_df1, x='TIMESTAMP', y=y)
     st.plotly_chart(plot, use_container_width=True, theme='streamlit')
 
 # creating one plot including all sensors
-def plotly_all(df):
-    df1 = df.tail(30)
-    st.line_chart(data=df1, x='TIMESTAMP')
+def plotly_all(sensors_df):
+    sensors_df2 = sensors_df.drop(columns='is_motion').tail(30)
+    # sensors_df1 = sensors_df.tail(30)
+    st.line_chart(data=sensors_df2, x='TIMESTAMP')
 
-# converting the df into CSV
+# converting the sensors_df into CSV
 @st.cache_data
-def convert_df(df):
+def convert_sensors_df(sensors_df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
-    return df.to_csv().encode('utf-8')
+    return sensors_df.to_csv().encode('utf-8')
 
 def create_snow():
     st.snow
@@ -34,44 +38,42 @@ st.set_page_config(
 st.title("Agrotech Project Dashboard")
 
 # first appearance - sensors current measurments
-Sensor1, Sensor2, Sensor3, Sensor4, Sensor5, Sensor6 = st.columns(6)
-df = pd.read_csv(('fixed2.csv'))
+Sensor1, Sensor2, Sensor3, Sensor4 = st.columns(4)
+sensors_df = pd.read_csv((sensors_csv))
+# motion_df = pd.read_csv((motion_csv))
 Sensor1.metric(
     
     label="Sensor 1 RH",
-    value=df['sensor1'].iloc[-1]
+    value=sensors_df['Sensor 1'].iloc[-1]
 )
 Sensor2.metric(
     
     label="Sensor 2 RH",
-    value=df['sensor2'].iloc[-1]
+    value=sensors_df['Sensor 2'].iloc[-1]
 )
 Sensor3.metric(
     
     label="Sensor 3 RH",
-    value=df['sensor3'].iloc[-1]
+    value=sensors_df['Sensor 3'].iloc[-1]
 )
 Sensor4.metric(
     
     label="Sensor 4 RH",
-    value=df['sensor4'].iloc[-1]
+    value=sensors_df['Sensor 4'].iloc[-1]
 )
-Sensor5.metric(
-    
-    label="Sensor 5 RH",
-    value=df['sensor5'].iloc[-1]
-)
-Sensor6.metric(
-    
-    label="Sensor 6 RH",
-    value=df['sensor6'].iloc[-1]
-)
+
 
 # plotting all sensors into one plot
-plotly_all(df)
+plotly_all(sensors_df)
+
+
+if sensors_df['is_motion'].iloc[-1] == 1:
+    st.markdown('**:red[Motion Detected - Alarm is ACTIVE]**')
+else:
+    st.markdown('**:green[No Motion Detected - No Alarm]**')
 
 # creating the download button
-csv = convert_df(df)
+csv = convert_sensors_df(sensors_df)
 st.download_button(
     label="Download data as CSV",
     data=csv,
@@ -82,30 +84,24 @@ st.download_button(
 if st.button(label='HighTech Computing Integration Module'):
     st.snow()
 
-col1, col2, col3 = st.columns(3)
-df = pd.read_csv('fixed2.csv')
+col1, col2 = st.columns(2)
+sensors_df = pd.read_csv(sensors_csv)
 
 with col1:
     label='graph'
-    value=plotly(df, 'sensor1')
+    value=plotly(sensors_df, 'Sensor 1')
 with col2:
     label='grapg'
-    value=plotly(df, 'sensor2')
-with col3:
-    label='graph'
-    value=plotly(df, 'sensor3')
+    value=plotly(sensors_df, 'Sensor 2')
 
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1:
     label='graph'
-    value=plotly(df, 'sensor4')
+    value=plotly(sensors_df, 'Sensor 3')
 with col2:
     label='graph'
-    value=plotly(df, 'sensor5')
-with col3:
-    label='graph'
-    value=plotly(df, 'sensor6')
+    value=plotly(sensors_df, 'Sensor 4')
 
 
 time.sleep(1)
