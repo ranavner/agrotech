@@ -24,7 +24,7 @@ def add_sensor_to_list(it):
 
 
 header = [("Sensor " + str(i)) for i in range(1, NUMBER_OF_SENSORS + 1)]
-
+header2 = ['is_motion']
 
 def create_csv_header():
     # create csv header
