@@ -9,7 +9,6 @@ import os
 path_to_csv = glob.glob('*.csv')
 sensors_csv = glob.glob(max(path_to_csv, key=os.path.getctime))[0]
 
-
 # creating individual plots for each sensor
 def plotly(sensors_df, sensor_number):
     y = sensor_number
@@ -20,8 +19,8 @@ def plotly(sensors_df, sensor_number):
 # creating one plot including all sensors
 def plotly_all(sensors_df):
     sensors_df2 = sensors_df.drop(columns='is_motion').tail(30)
-    # sensors_df1 = sensors_df.tail(30)
-    st.line_chart(data=sensors_df2, x='TIMESTAMP')
+    sensors_df3 = sensors_df2.dropna()
+    st.line_chart(data=sensors_df3, x='TIMESTAMP')
 
 # converting the sensors_df into CSV
 @st.cache_data
@@ -44,36 +43,49 @@ st.title("Agrotech Project Dashboard")
 # first appearance - sensors current measurments
 Sensor1, Sensor2, Sensor3, Sensor4 = st.columns(4)
 sensors_df = pd.read_csv((sensors_csv))
+sensors_df2 = sensors_df.drop(columns='is_motion').tail(30)
+sensors_df3 = sensors_df2.dropna()
+try:
+    st.write(sensors_df)
+    st.write(sensors_df2)
+    st.write(sensors_df3)
+except: 
+    st.write(sensors_df3)
 Sensor1.metric(
     
     label="Sensor 1 RH",
-    value=sensors_df['Sensor 1'].iloc[-1]
+    value=sensors_df3['Sensor 1'].iloc[-1]
 )
 Sensor2.metric(
     
     label="Sensor 2 RH",
-    value=sensors_df['Sensor 2'].iloc[-1]
+    value=sensors_df3['Sensor 2'].iloc[-1]
 )
 Sensor3.metric(
     
     label="Sensor 3 RH",
-    value=sensors_df['Sensor 3'].iloc[-1]
+    value=sensors_df3['Sensor 3'].iloc[-1]
 )
 Sensor4.metric(
     
     label="Sensor 4 RH",
-    value=sensors_df['Sensor 4'].iloc[-1]
+    value=sensors_df3['Sensor 4'].iloc[-1]
 )
 
 
 # plotting all sensors into one plot
 plotly_all(sensors_df)
 
-
+placeholder = st.empty()
 if sensors_df['is_motion'].iloc[-1] == 1:
-    st.markdown('**:red[Motion Detected - Alarm is ACTIVE]**')
+    # placeholder.markdown('**:red[Motion Detected - Alarm is ACTIVE]**')
+    placeholder.text('dfdfdfdf')
+    # st.markdown('**:red[Motion Detected - Alarm is ACTIVE]**')
+
 else:
-    st.markdown('**:green[No Motion Detected - No Alarm]**')
+    placeholder.markdown('**:green[No Motion Detected - No Alarm]**')
+    # st.markdown('**:green[No Motion Detected - No Alarm]**')
+placeholder.empty()
 
 # creating the download button
 csv = convert_sensors_df(sensors_df)
@@ -92,19 +104,19 @@ sensors_df = pd.read_csv(sensors_csv)
 
 with col1:
     label='graph'
-    value=plotly(sensors_df, 'Sensor 1')
+    value=plotly(sensors_df3, 'Sensor 1')
 with col2:
     label='grapg'
-    value=plotly(sensors_df, 'Sensor 2')
+    value=plotly(sensors_df3, 'Sensor 2')
 
 col1, col2 = st.columns(2)
 
 with col1:
     label='graph'
-    value=plotly(sensors_df, 'Sensor 3')
+    value=plotly(sensors_df3, 'Sensor 3')
 with col2:
     label='graph'
-    value=plotly(sensors_df, 'Sensor 4')
+    value=plotly(sensors_df3, 'Sensor 4')
 
 
 time.sleep(1)
