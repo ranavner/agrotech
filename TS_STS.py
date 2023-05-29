@@ -17,7 +17,7 @@ CHANNEL_ID = '2076230'
 # ----------------------------------------------------------
 
 sensors_csv = 'sensors_csv_' + str(datetime.now()) + '.csv'     # creating a csv with the current timestamp as filename
-sensors_header = ['TIMESTAMP', 'Sensor 1', 'Sensor 2', 'Sensor 3', 'Sensor 4', 'is_motion']
+sensors_header = ['TIMESTAMP', 'Sensor 1', 'Sensor 2', 'Sensor 3', 'Sensor 4', 'is_motion', 'tmp', 'vpd']
 placeholder = st.empty()
 
 def create_csv_header(file_name, header):
@@ -36,7 +36,7 @@ def get_data_from_thingspeak():
         response = ts.read()
         data = json.loads(response)
         print(data)
-        sensors_data = [data['created_at'], data['field1'], data['field2'], data['field3'], data['field4'], data['field5']]
+        sensors_data = [data['created_at'], data['field1'], data['field2'], data['field3'], data['field4'], data['field5'], data['field6'], data['field7']]
         print(sensors_data)
         with open(sensors_csv, 'a') as s:
             writer = csv.writer(s)
