@@ -2,9 +2,13 @@ import streamlit as st
 import pandas as pd
 import time
 import plotly.express as px
+import glob
+import os 
 
-sensors_csv = 'sensors_csv.csv'
-motion_csv = 'motion_csv.csv'
+# sensors_csv = 'sensors_csv.csv'
+path_to_csv = glob.glob('*.csv')
+sensors_csv = glob.glob(max(path_to_csv, key=os.path.getctime))[0]
+
 
 # creating individual plots for each sensor
 def plotly(sensors_df, sensor_number):
@@ -40,7 +44,6 @@ st.title("Agrotech Project Dashboard")
 # first appearance - sensors current measurments
 Sensor1, Sensor2, Sensor3, Sensor4 = st.columns(4)
 sensors_df = pd.read_csv((sensors_csv))
-# motion_df = pd.read_csv((motion_csv))
 Sensor1.metric(
     
     label="Sensor 1 RH",
@@ -75,7 +78,7 @@ else:
 # creating the download button
 csv = convert_sensors_df(sensors_df)
 st.download_button(
-    label="Download data as CSV",
+    label="Download last data as CSV",
     data=csv,
     file_name='Sensors_Data.csv',
     mime='text/csv',

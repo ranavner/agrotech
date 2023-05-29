@@ -6,8 +6,9 @@ import pandas as pd
 from tkinter import *
 import streamlit as st
 from streamlit.web import cli as stcli
-import sys
+from os.path import exists
 import subprocess
+from datetime import datetime
 
 # ----------------------------------------------------------
 # thingspeak api request setup
@@ -15,8 +16,9 @@ READ_API_KEY = 'UMOB8GG4SVBVXTHA'
 CHANNEL_ID = '2076230'
 # ----------------------------------------------------------
 
-sensors_csv = 'sensors_csv.csv'
+sensors_csv = 'sensors_csv_' + str(datetime.now()) + '.csv'     # creating a csv with the current timestamp as filename
 sensors_header = ['TIMESTAMP', 'Sensor 1', 'Sensor 2', 'Sensor 3', 'Sensor 4', 'is_motion']
+
 
 def create_csv_header(file_name, header):
     # create csv header
@@ -40,6 +42,7 @@ def get_data_from_thingspeak():
             writer = csv.writer(s)
             writer.writerow(sensors_data)
             s.flush()
+
         
         time.sleep(0.7)
         ts.close()
