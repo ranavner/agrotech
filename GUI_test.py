@@ -11,10 +11,9 @@ def main():
     sensors_csv = glob.glob(max(path_to_csv, key=os.path.getctime))[0]
 
     # creating individual plots for each sensor
-    def plotly(sensors_df, sensor_number):
+    def plot_individual(sensors_df, sensor_number):
         y = sensor_number
-        sensors_df1 = sensors_df.tail(30)
-        plot = px.line(sensors_df1, x='TIMESTAMP', y=y)
+        plot = px.line(sensors_df, x='TIMESTAMP', y=y)
         st.plotly_chart(plot, use_container_width=True, theme='streamlit')
 
     # creating one plot including all sensors
@@ -51,6 +50,7 @@ def main():
     sensors_df3 = sensors_df2.dropna()
     sensors_df4 = sensors_df3.sort_values('TIMESTAMP').drop_duplicates(keep='last')
     sensors_df4 = sensors_df4.tail(30)
+
     placeholder1 = st.empty()
     with placeholder1:
         Sensor1.metric(
@@ -88,6 +88,7 @@ def main():
         value=sensors_df4['vpd'].iloc[-1]
     )
 
+
     try:
         st.write(sensors_df)
         st.write(sensors_df2)
@@ -103,14 +104,14 @@ def main():
     with tmp_graph:
         
         label="Field Temperture Graph",
-        value=plotly(sensors_df4, 'tmp')
+        value=plot_individual(sensors_df4, 'tmp')
 
     with vpd_graph:
         
         label="Field VPD Graph",
-        value=plotly(sensors_df4, 'vpd')
+        value=plot_individual(sensors_df4, 'vpd')
 
-
+# ----------------------------------------------------------------------------- until here, synced with GUI_test.py
     placeholder = st.empty()
     if sensors_df['is_motion'].iloc[-1] == 1:
         # placeholder.markdown('**:red[Motion Detected - Alarm is ACTIVE]**')

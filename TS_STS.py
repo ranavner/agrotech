@@ -2,11 +2,7 @@ import csv
 from urllib.request import urlopen
 import json
 import time
-import pandas as pd
-from tkinter import *
 import streamlit as st
-from streamlit.web import cli as stcli
-from os.path import exists
 import subprocess
 from datetime import datetime
 
@@ -15,6 +11,8 @@ from datetime import datetime
 READ_API_KEY = 'UMOB8GG4SVBVXTHA'
 CHANNEL_ID = '2076230'
 # ----------------------------------------------------------
+
+streamlit_script = 'GUI_test_placeholder.py'
 
 sensors_csv = 'sensors_csv_' + str(datetime.now()) + '.csv'     # creating a csv with the current timestamp as filename
 sensors_header = ['TIMESTAMP', 'Sensor 1', 'Sensor 2', 'Sensor 3', 'Sensor 4', 'is_motion', 'tmp', 'vpd']
@@ -27,7 +25,7 @@ def create_csv_header(file_name, header):
         writer.writerow(header)
 
 def get_data_from_thingspeak():
-    subprocess.Popen(["streamlit","run","GUI_test.py"])     # running the streamlit server by terminal
+    subprocess.Popen(["streamlit", "run", streamlit_script])     # running the streamlit server by terminal
     while True:
 
         ts = urlopen("http://api.thingspeak.com/channels/%s/feeds/last.json?api_key=%s"
