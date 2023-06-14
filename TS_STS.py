@@ -25,7 +25,11 @@ def create_csv_header(file_name, header):
         writer.writerow(header)
 
 def get_data_from_thingspeak():
+
+    #   running subprocess in the background
+    subprocess.Popen(["python3", "Download_image_repository.py"])   # runs a script that downloads the image repository every 6 seconds
     subprocess.Popen(["streamlit", "run", streamlit_script])     # running the streamlit server by terminal
+
     while True:
 
         ts = urlopen("http://api.thingspeak.com/channels/%s/feeds/last.json?api_key=%s"
@@ -40,7 +44,6 @@ def get_data_from_thingspeak():
             writer = csv.writer(s)
             writer.writerow(sensors_data)
             s.flush()
-
         
         time.sleep(1)
         ts.close()
