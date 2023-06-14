@@ -3,11 +3,12 @@ import pandas as pd
 import time
 import plotly.express as px
 import glob
-import os 
+import os
 import base64
 
 path_to_csv = glob.glob('*.csv')
 sensors_csv = glob.glob(max(path_to_csv, key=os.path.getctime))[0]
+#   _______________________________________________________________________________________________________
 
 try:
     path_to_image_directory = glob.glob('ESP32-CAM/*')
@@ -16,6 +17,7 @@ try:
     image_now = glob.glob(max(path_to_image, key=os.path.getctime))[0]
 except:
     pass
+#   _______________________________________________________________________________________________________
 
 @st.cache_data
 def convert_sensors_df(sensors_df):
@@ -41,6 +43,7 @@ def set_background(png_file):
     ''' % bin_str
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
+#   _______________________________________________________________________________________________________
 
 def main():
 
@@ -49,9 +52,6 @@ def main():
     def convert_sensors_df(sensors_df):
         # IMPORTANT: Cache the conversion to prevent computation on every rerun
         return sensors_df.to_csv().encode('utf-8')
-
-    def create_snow():
-        st.snow
 
     # streamllit page configuration
     st.set_page_config(
@@ -63,6 +63,8 @@ def main():
     set_background('Background.png')
 
     st.title("💧 Real-Data-Field Dashboard")
+
+#   _____________________________________PLACE HOLDERS___________________________________________________
 
     # first appearance - sensors current measurments
     Sensor1, Sensor2, Sensor3, Sensor4 = st.columns(4)
@@ -84,6 +86,7 @@ def main():
 
     # tmp and VPD data
     placeholder2 = st.columns(2)
+
     tmp = placeholder2[0].empty()
     VPD = placeholder2[1].empty()
 
@@ -104,10 +107,11 @@ def main():
 
     # plotting the tmp and the VPD
     placeholder5 = st.columns(2)
+
     tmp_graph = placeholder5[0].empty()
     VPD_graph = placeholder5[1].empty()
 
-    # presenting the image from the esp32 cam module (downloaded from drive)
+    # presenting the image from the ESP32 cam module (downloaded from drive)
     placeholder_image = st.empty()
     image = placeholder_image
 
@@ -119,6 +123,7 @@ def main():
         file_name='Sensors_Data.csv',
         mime='text/csv',
     )
+#   ____________________________________POSITIONING_________________________________________________________
 
     def update_displayed_data(sensors_df4):
         Sensor1.metric(
@@ -191,7 +196,8 @@ def main():
 
         # add buttons:
 
-# ---------------------------------------------------------- until here, synced with GUI_test.py
+#   _______________________________________________________________________________________________________
+
     def define_data_frames():
         global sensors_df, sensors_df2, sensors_df3, sensors_df4, sensors_df5, motion_df, motion_last_seen
         sensors_df = pd.read_csv((sensors_csv))
@@ -203,11 +209,13 @@ def main():
         motion_df = sensors_df.drop(columns=['Sensor 1', 'Sensor 2', 'Sensor 3', 'Sensor 4', 'tmp', 'vpd'])
         valves_df = sensors_df5.loc[sensors_df5 > 60, 'Fee'] = 'Active'
         motion_last_seen = motion_df[motion_df['is_motion'] == 1].iloc[-1]['TIMESTAMP']
+#   _______________________________________________________________________________________________________
 
     while True:
         define_data_frames()
         update_displayed_data(sensors_df4)
         time.sleep(1)
+#   _______________________________________________________________________________________________________
 
 try:
     main()
